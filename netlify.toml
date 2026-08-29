@@ -1,0 +1,16 @@
+# Static site — no build step. All PDF processing happens client-side.
+
+[build]
+  command = ""
+  publish = "."
+
+[[headers]]
+  for = "/js/*"
+  [headers.values]
+    Content-Type = "text/javascript; charset=utf-8"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "no-referrer"

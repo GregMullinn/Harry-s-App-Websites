@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Print-Ready Artwork Checker</title>
+  <link rel="stylesheet" href="./css/styles.css" />
+  <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.esm.min.js"
+      }
+    }
+  </script>
+  <script type="module" src="./js/main.js"></script>
+</head>
+<body>
+  <main class="wrap">
+    <header class="app-head">
+      <h1>Print-Ready Artwork Checker</h1>
+      <p class="lede">
+        Upload a PDF, tell it how the job is finished, and it checks the things a
+        prepress operator checks first. Your file is analysed entirely in your
+        browser &mdash; nothing is uploaded to a server.
+      </p>
+    </header>
+
+    <section class="card" aria-labelledby="step1">
+      <h2 id="step1"><span class="step-n">1</span> Choose a PDF</h2>
+      <label class="dropzone" id="dropzone">
+        <input type="file" id="file-input" accept="application/pdf,.pdf" hidden />
+        <span class="dropzone-inner">
+          <strong id="file-name">Drop a PDF here or click to browse</strong>
+          <span class="hint" id="file-hint">Single or multi-page, up to a few hundred MB</span>
+        </span>
+      </label>
+    </section>
+
+    <section class="card" aria-labelledby="step2">
+      <h2 id="step2"><span class="step-n">2</span> How is it finished?</h2>
+      <div class="mode-grid">
+        <label class="mode">
+          <input type="radio" name="mode" value="trim" />
+          <span class="mode-body">
+            <strong>Trim square</strong>
+            <span>Cut on straight lines. Checks for a TrimBox, 5&nbsp;mm bleed and crop marks.</span>
+          </span>
+        </label>
+        <label class="mode">
+          <input type="radio" name="mode" value="diecut" />
+          <span class="mode-body">
+            <strong>Die-cut / profile cut</strong>
+            <span>Cut to a shape. Checks for a spot-colour cut path and that it is set to overprint.</span>
+          </span>
+        </label>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button id="run" type="button" disabled>Check artwork</button>
+      <button id="toggle-guides" type="button" class="ghost" hidden>Show setup guides</button>
+      <span id="status" class="status" role="status"></span>
+    </div>
+
+    <section id="results" class="results" hidden aria-live="polite"></section>
+
+    <section id="guides" class="card guides" hidden aria-labelledby="guides-h">
+      <h2 id="guides-h">Making a spot colour &amp; applying overprint</h2>
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="illustrator" class="active" aria-selected="true">Adobe Illustrator</button>
+        <button role="tab" data-tab="affinity" aria-selected="false">Affinity</button>
+      </div>
+      <div class="tab-panel" id="tab-illustrator"></div>
+      <div class="tab-panel" id="tab-affinity" hidden></div>
+    </section>
+
+    <footer class="app-foot">
+      <details>
+        <summary>What this tool can and can't tell you</summary>
+        <ul>
+          <li>Checks are based on the PDF's page boxes and object structure
+              (TrimBox / BleedBox geometry, Separation &amp; DeviceN colour
+              spaces, ExtGState overprint flags) plus a scan of the page content
+              streams.</li>
+          <li>It confirms that <em>boxes and colours are set correctly</em>. It
+              does not render the artwork, so it can't confirm that your image
+              data actually fills the bleed, or visually verify a knockout.
+              Always eyeball the file in Overprint Preview too.</li>
+          <li>Page rotation and <code>/UserUnit</code> scaling are ignored in the
+              crop-mark geometry check.</li>
+          <li>Encrypted / password-protected PDFs may give unreliable results.</li>
+        </ul>
+      </details>
+    </footer>
+  </main>
+</body>
+</html>
